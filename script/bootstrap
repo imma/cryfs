@@ -4,9 +4,14 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  curl -O "https://s3-eu-west-1.amazonaws.com/apt.cryfs.org/ubuntu/pool/main/c/cryfs/cryfs_0.9.7_ubuntu-16.04-x64.deb"
-  $NOSUDO sudo dpkg -i cryfs_0.9.7_ubuntu-16.04-x64.deb
-  rm -f cryfs_0.9.7_ubuntu-16.04-x64.deb
+  case "${DISTRIB_ID}" in
+    Ubuntu)
+      curl -O "https://s3-eu-west-1.amazonaws.com/apt.cryfs.org/ubuntu/pool/main/c/cryfs/cryfs_${CRYFS_VERSION}_ubuntu-16.04-x64.deb"
+      $NOSUDO sudo aptitude install -y libcrypto++9v5 libcurl3 gnupg2
+      $NOSUDO sudo dpkg -i cryfs_${CRYFS_VERSION}_ubuntu-16.04-x64.deb
+      rm -f cryfs_${CRYFS_VERSION}_ubuntu-16.04-x64.deb
+      ;;
+  esac
 }
 
 main "$@"

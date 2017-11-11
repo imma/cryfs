@@ -4,7 +4,7 @@ function version {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  local ver_cryfs="0.0.1"
+  local ver_cryfs="$(cryfs -h 2>/dev/null | awk 'NR == 1 { print $3 }' || true)"
   jq -n --arg cryfs "$ver_cryfs" '{cryfs: $cryfs}'
 }
 
