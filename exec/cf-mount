@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local pth_secret="$1"; shift
+  local nm_fs="$1"; shift
+
+  mkdir -p "${nm_fs}"
+  gpg2 -q -d "${pth_secret}/secret.key" | cf "${pth_secret}" "${nm_fs}"
+}
+
+source sub "$BASH_SOURCE" "$@"

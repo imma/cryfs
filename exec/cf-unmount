@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local nm_fs="$1"; shift
+  
+  case "${DISTRIB_ID}" in
+    Darwin)
+      umount -f "${nm_fs}"
+      ;;
+    *)
+      fusermount -u "${nm_fs}"
+      ;;
+  esac
+}
+
+source sub "$BASH_SOURCE" "$@"

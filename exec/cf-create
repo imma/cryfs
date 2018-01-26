@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local nm_fs="$1"; shift
+
+  mkdir -p "${nm_fs}.mnt"
+  openssl rand -base64 48 | gpg2 -e --armor -o "${nm_fs}.mnt/secret.key" "$@"
+
+  cf mount "${nm_fs}.mnt" "${nm_fs}"
+  touch "${nm_fs}/.done"
+  cf unmount "${nm_fs}"
+}
+
+source sub "$BASH_SOURCE" "$@"
