@@ -6,13 +6,23 @@ function main {
 
   case "${DISTRIB_ID}" in
     Ubuntu)
-      curl -O "https://s3-eu-west-1.amazonaws.com/apt.cryfs.org/ubuntu/pool/main/c/cryfs/cryfs_${CRYFS_VERSION}_ubuntu-16.04-x64.deb"
-      if ! $NOSUDO sudo aptitude install -y libcrypto++9v5 libcurl3 gnupg2 libfuse2 fuse; then
-        $NOSUDO sudo apt-get update
-        $NOSUDO sudo aptitude install -y libcrypto++9v5 libcurl3 gnupg2 libfuse2 fuse
-      fi
-      $NOSUDO sudo dpkg -i cryfs_${CRYFS_VERSION}_ubuntu-16.04-x64.deb
-      rm -f cryfs_${CRYFS_VERSION}_ubuntu-16.04-x64.deb
+      $NOSUDO sudo aptitude install -y git g++ cmake make libcurl4-openssl-dev libboost-filesystem-dev libboost-system-dev libboost-chrono-dev libboost-program-options-dev libboost-thread-dev libcrypto++-dev libssl-dev libfuse-dev python
+      mkdir -p "$shome/vendor"
+      rm -rf "$shome/vendor/cryfs-${CRYFS_VERSION}"
+      git clone https://github.com/cryfs/cryfs.git "$shome/vendor/cryfs-${CRYFS_VERSION}"
+      cd "$shome/vendor/cryfs-${CRYFS_VERSION}"
+      git checkout "${CRYFS_VERSION}"
+      mkdir cmake
+      cd cmake
+      cmake ..
+      make
+      mkdir -p "$shome/bin"
+      chmod 755 src/cryfs-cli/cryfs
+      rsync -ia src/cryfs-cli/cryfs "$shome/bin/"
+      rm -rf "$shome/vendor/cryfs-${CRYFS_VERSION}"
+      ;;
+    Darwin)
+      brew instal cryfs
       ;;
   esac
 }

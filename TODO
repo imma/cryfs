@@ -1,0 +1,4 @@
+install git g++ cmake make libcurl4-openssl-dev libboost-filesystem-dev libboost-system-dev libboost-chrono-dev libboost-program-options-dev libboost-thread-dev libcrypto++-dev libssl-dev libfuse-dev python
+git clone https://github.com/cryfs/cryfs.git cryfs
+
+
