@@ -12,6 +12,7 @@ function main {
   cf mount "${nm_fs}.mnt" "${nm_fs}"
   touch "${nm_fs}/.done"
   cf unmount "${nm_fs}"
+  rmdir "${nm_fs}"
 }
 
 source sub "$BASH_SOURCE" "$@"
